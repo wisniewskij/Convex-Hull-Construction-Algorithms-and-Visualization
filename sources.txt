@@ -1,0 +1,3 @@
+https://www.geeksforgeeks.org/ (29/12/2023)
+Introduction to Algorithms, fourth edition (Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest)
+Optimal output-sensitive convex hull algorithms in two and three dimensions (T. M. Chan)
