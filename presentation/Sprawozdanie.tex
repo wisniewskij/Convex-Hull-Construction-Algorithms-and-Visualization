@@ -1,0 +1,208 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr}
+\usepackage{polski}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{pdflscape}
+\usepackage[left=2cm,top=2 cm,right=2cm,bottom=2cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[export]{adjustbox}
+\usepackage{xcolor,listings}
+\usepackage{textcomp}
+\usepackage{color}  
+\usepackage{underscore}
+\usepackage{hyperref}
+\usepackage{pdfpages}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{sectsty}
+\usepackage{amsmath}%
+\usepackage{MnSymbol}%
+\usepackage{float}
+\usepackage{wasysym}%
+
+\sectionfont{\fontsize{30}{15}\selectfont}
+\geometry{legalpaper, landscape}
+
+\lstset{upquote=true}
+
+\hypersetup{
+    colorlinks=true,
+    linktoc=all,
+    linkcolor=black
+}
+
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt} 
+\fancyhead[R]{}
+\lhead{}
+\setlength{\headheight}{8pt}
+
+\cfoot{}
+\rfoot{\thepage} 
+
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\numberstyle,
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+}
+\lstset{style=mystyle}
+
+\newcommand\numberstyle[1]{%
+    \footnotesize
+    \color{codegray}%
+    \ttfamily
+    \ifnum#1<10 0\fi#1 |%
+}
+
+\lstset{frame=lrbt,xleftmargin=\fboxsep,xrightmargin=-\fboxsep}
+
+
+\begin{document}
+
+\begin{titlepage}
+\scshape
+
+\centering
+\includegraphics[scale=0.9]{logo.jpg} \par %\vspace{0.1cm}
+%\huge \texttt{Akademia Górniczo Hutnicza \\ im. Stanisława Staszica \\ w Krakowie}
+
+
+\rule{\textwidth}{2px}
+{\Huge{\textbf{Algorytmy Geometryczne }}}\par \vspace{0.4cm}
+%PROJEKT:\\ 
+\huge{ \textit{Otoczka wypukła dla zbioru punktów w przestrzeni dwuwymiarowej}}
+\rule{\textwidth}{2px}
+
+
+\begin{center}
+Smyda Tomasz \\
+Wiśniewski Jakub
+\end{center}
+
+
+\end{titlepage}
+
+\newpage
+\LARGE
+\section{Problem}
+Otoczką wypukłą nazywamy najmniejszy zbiór wypukły zawierający w sensie inkluzji dany zbiór punktów. Inaczej - jest to najmniejszy wielokąt wypukły rozpięty na wierzchołkach danego zbioru punktów taki, że wszystkie punkty znajdują się albo wewnątrz niego, albo na jego krawędzi.
+
+Wyznaczenie otoczki wypukłej dla danego zbioru punktów znajduje zastosowania w informatyce. Między innymi w:
+\begin{itemize}
+\item Wyznaczenie najmeniejszego pojemnika
+\item Algorytm detekcji kolizji
+\item Analiza kształtu obiektu
+\end{itemize}
+%GRAHAM
+\newpage
+\section{Algorytm Grahama}
+\begin{itemize}
+\item W zbiorze S wybieramy punkt $p_0$ o najmniejszej współrzędnej y. Jeżeli jest kilka takich punktów, to wybieramy ten z nich, który ma najmniejszą współrzędną x.
+\item Sortujemy pozostałe punkty ze względu na kąt, jaki tworzy wektor $[p_0, p]$ z dodatnim kierunkiem osi OX. Jeśli kilka punktów tworzy ten sam kąt, usuwamy wszystkie z wyjątkiem najbardziej oddalonego od $p_0$. Niech uzyskanym ciągiem będzie $p_1, p_2, \dots , p_m$
+\item Do poczatkowo pustego stosu s wkładamy punkty $p_0, p_1, p_2$\
+\item Iterujemy po reszcie posortowanych punktów. Jeżeli kolejny punkt znajduje się po prawej stronie odcinka utworzonego z dwóch ostatnich punktów ze stosu lub jest z nim współliniowy, to usuwamy ostatni punkt ze stosu. W przeciwnym przypadku wstawiamy punkt na szczyt stosu i przechodzimy do następnego punktu.
+\item Punkty, które zostały na stosie po ukończeniu algorytmu tworzą otoczkę wypukłą dla danego zbioru punktów
+\item Algorytm ma złożoność $O(n\log n)$
+\end{itemize}
+\input{graham.txt}
+\newpage
+%JARVIS
+\section{Algorytm Jarvisa}
+\begin{itemize}
+\item Wyznaczamy najniżej położony punkt spośród wszystkich. Jeżeli istnieje więcej niż jeden taki punkt, to wybieramy ten o najmniejszej współrzędnej x.
+\item Powtarzaj, dopóki następny wykryty punkt jest różny od pierwszego punktu:
+\begin{itemize}
+\item[$\blacksquare$] Znajdź punkt,  dla którego kąt liczony przeciwnie do ruchu wskazówek zegara w odniesieniu do ostatniej krawędzi otoczki jest najmniejszy. Ten punkt jest kolejnym punktem należącym do otoczki.
+\end{itemize}
+\item Znalezione punkty tworzą otoczkę wypukłą.
+\item Algorytm ma złożoność $O(nh)$, gdzie $h$ jest liczbą punktów należących do otoczki.
+\end{itemize}
+\input{jarvis.txt}
+\newpage
+%CHAN
+\section{Algorytm Chana}
+\begin{itemize}
+\item Podziel wejściowy zbiór punktów na podzbiory o w miarę równych ilosciach punktów w nich zawartych, z których żaden nie zawiera więcej niż dane $m$.
+\item Wyznacz otoczki dla każdego takiego zbioru.
+\item Analogicznie jak w algorytmie Jarvisa wybierz najniższy punkt należący do danego zbioru punktów.
+\item Mając wierzchołek należący do otoczki możemy wyznaczyć następny:
+\begin{itemize}
+\item[$\blacksquare$] Dla każdej podotoczki wyznaczamy punkt styczny do tej otoczki.
+\item[$\blacksquare$] Spośród zbioru takich punktów oraz kolejnego punktu z podotoczki, do której dany punkt należy wybieramy taki punkt, że wszystkie pozostałe punkty znajdują się na lewo od odcinka utworzonego z wierzchołka należącego do otoczki głównej i niego.
+\item[$\blacksquare$] Tak wybrany punkt jest kolejnym punktem otoczki głównej.
+\end{itemize}
+\item Wyznaczamy kolejne punkty otoczki, dopóki nie znajdziemy punktu początkowego. Jeżeli nie znajdziemy punktu początkowego w $m$ iteracjach to przerywamy wykonywanie algorytmu.
+\item Algorytm ma złożoność $O(n\log n)$
+\end{itemize}
+\newpage
+%DNC
+\section{Algorytm dziel i rządź}
+\begin{itemize}
+\item Sortujemy zbiór punktów.
+\item Dzielimy zbiór na mniejsze względem mediany zbioru. Powtarzamy czynność dopóki wielkość dowolnego zbioru jest mniejsza niż zadane $k$.
+\item Dla każdego małego zbioru wyznaczamy otoczki wypukłe innym algorytmem znajdowania otoczki wypukłej.
+\item Łączymy otoczki wypukłe w jedną otoczkę, tak aby zachować złożoność algorytmu $O(n \log n)$.
+\item Algorytm ma złożoność $O(n\log n)$
+\end{itemize}
+\newpage
+%PRZYROSTOWY
+\section{Algorytm przyrostowy}
+\begin{itemize}
+\item Z trzech pierwszych punktów tworzymy otoczkę wypukłą.
+\item Iterujemy po pozostałych punktach wykonując następujące czynności:
+\begin{itemize}
+\item[$\blacksquare$] Jeżeli punkt należy do wnętrza wyznaczonej już otoczki to przechodzimy do kolejnego punktu.
+\item[$\blacksquare$] Jeżeli punkt nie należy do wnętrza otoczki to znajdujemy styczne do otoczki z danego punktu i aktualizujemy otoczkę o znalezione krawędzie.
+\end{itemize}
+\item Zwracamy punkty otoczki.
+\item Algorytm ma złożoność $O(n\log n)$
+\end{itemize}
+\newpage
+%GORNA DOLNA
+\section{Algorytm górnej i dolnej otoczki}
+\begin{itemize}
+\item Sortujemy punkty rosnąco po współrzędnych x. W przypadku takich samych pierwszych współrzędnych, porównujemy drugie współrzędne.
+\item Pierwsze dwa punkty z posortowanego zbioru wpisujemy do zbioru punktów otoczki górnej oraz dolnej.
+\item Iterujemy po zbiorze punktów zaczynając od punktu trzeciego:
+\begin{itemize}
+\item[$\blacksquare$] Dopóki górna (dolna) otoczka ma co najmniej 2 punkty oraz bieżący punkt nie znajduje się po prawej (lewej) stronie odcinka skierowanego utworzonego przez ostatnie dwa punkty otoczki, to usuwamy punkt z górnej (dolnej) otoczki. W przeciwnym przypadku dodajemy punkt do otoczki górnej (dolnej).
+\end{itemize}
+\item Odwracamy kolejność wierzchołków w otoczce dolnej.
+\item Łączymy zbiory punktów otoczki górnej oraz dolnej i zwracamy złączony zbiór punktów otoczki.
+\item Algorytm ma złożoność $O(n\log n)$
+\end{itemize}
+\newpage
+%QUICKHULL
+\section{Algorytm Quickhull}
+\begin{itemize}
+\item Znajdź dwa punkty skrajne $A$ oraz $B$ - pierwszy o najmniejszej pierwszej współrzędnej, drugi o największej pierwszej współrzędnej.
+\item Uruchamiamy rekurencyjną funkcję znajdowania łuku należącego do otoczki między danymi punktami należącymi do tej otoczki $p$, $q$ na prawo od odcinka $\left | p q \right | $. Otoczka jest sumą punktów w wyniku działania funkcji rekurencyjnej dla odcinka $\left | a b \right | $ oraz dla odcinka $\left | b a \right | $.
+\item Funkcja rekurencyjna polega na:
+\begin{itemize}
+\item[$\blacksquare$] Wyznaczeniu najbardziej odległego punktu na prawo od $\left | p q \right | $, jeśli takich punktów nie ma to zwracamy pustą tablicę.
+\item[$\blacksquare$] Punkty $p$, $q$ należą do otoczki, to znaleziony punkt $r$ musi do niej należeć. Usuwamy wszystkie wierzchołki wewnątrz trójkąta $pqr$
+\item[$\blacksquare$] Szukany łuk to suma działania funkcji rekurencyjnej dla punktów $p$, $r$ oraz dla punktów $r$, $q$.
+\item[$\blacksquare$] Na koniec zwracamy znaleziony łuk.
+\end{itemize}
+\item Algorytm ma złożoność oczekiwaną rzędu $O(n\log n)$, natiomiast złoźoność pesymistyczną rzędu $O(n^2)$
+\end{itemize}
+
+
+\end{document}
